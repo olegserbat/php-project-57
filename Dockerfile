@@ -4,7 +4,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev
 RUN docker-php-ext-install pdo pdo_pgsql zip
-
+#My text
+RUN pecl install excimer
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
