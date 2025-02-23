@@ -24,3 +24,10 @@ require __DIR__.'/auth.php';
 Route::get('/tasks', function () {
     return view('tasks');
 });
+
+Route::get('/task_statuses', function () {
+    return view('task_statuses');
+});
+Route::get('/labels', function () {
+    return view('labels');
+});
