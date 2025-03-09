@@ -41,9 +41,8 @@ class TaskStatusController extends Controller
     {
         $taskStatus = TaskStatus::findOrFail($id);
         $data = $request->validate([
-            'name' => "required|unique:task_statuses, name, {$taskStatus->id}",
+            'name' => "required",
         ]);
-        $taskStatus = new TaskStatus();
         $taskStatus->fill($data);
         $taskStatus->save();
         $request->session()->flash('status', 'Статус успешно изменен');
