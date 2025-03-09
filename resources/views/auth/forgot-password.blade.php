@@ -2,7 +2,9 @@
     <div class="mb-4 text-sm text-gray-600">
         {{ __('') }}
     </div>
-
+    <h2 class="text-center">
+        <a href="/">Менеджер задач</a>
+    </h2>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="ru">
-@include('shared.head')
-<body>
-<div id="app">
-    @include('shared.header')
+@extends('layouts.main')
+@section('content')
 
     <section class="bg-white">
         <div class="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
@@ -38,5 +34,4 @@
             </div>
         </div>
     </section>
-
-</div>
+@endsection
