@@ -3,9 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskStatusController;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
-   return view('main');
+    return view('main');
 })->name('main');
 
 
@@ -20,7 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/tasks', function () {
     return view('tasks');
@@ -32,6 +33,13 @@ Route::post('/task_statuses', [TaskStatusController::class, 'store'])->name('tas
 Route::get('/task_statuses/{id}/edit', [TaskStatusController::class, 'edit'])->name('task_status.edit');
 Route::patch('/task_statuses/{id}', [TaskStatusController::class, 'update'])->name('task_status.update');
 Route::delete('/task_statuses/{id}', [TaskStatusController::class, 'destroy'])->name('task_status.delete');
+
+Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+Route::patch('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
+Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.delete');
 
 
 

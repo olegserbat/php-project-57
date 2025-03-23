@@ -3,6 +3,13 @@
 
     <section class="bg-white">
         <div class="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
+            @if (session('status'))
+                <div class="alert
+                    alert-success
+                    " role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
             <div class="grid col-span-full">
                 <h1 class="mb-5">Задачи</h1>
 
@@ -11,33 +18,24 @@
                         <form method="GET" action="/tasks">
                             <div class="flex">
                                 <select class="rounded border-gray-300" name="filter[status_id]" id="filter[status_id]">
-                                    <option value="" selected="selected">Статус</option>
-                                    <option value="1">новая</option>
-                                    <option value="2">завершена</option>
-                                    <option value="3">выполняется</option>
-                                    <option value="4">в архиве</option>
+                                    <option value="{{$selected['status_id']}}" >{{$selected['status_name']}}</option>
+                                    @foreach($statuses as $status)
+                                        <option value="{{$status->status_id}}">{{$status->taskStatusesName}}</option>
+                                    @endforeach
                                 </select>
                                 <select class="rounded border-gray-300" name="filter[created_by_id]"
                                         id="filter[created_by_id]">
-                                    <option value="" selected="selected">Автор</option>
-                                    <option value="1">Владимир Евгеньевич Михайлов</option>
-
-                                    <option value="8">Марк Александрович Авдеев</option>
-                                    <option value="9">Воронов Роберт Романович</option>
-                                    <option value="10">Фёдоров Вячеслав Романович</option>
-                                    <option value="11">Клим Евгеньевич Федотов</option>
-                                    <option value="12">Калинин Данила Фёдорович</option>
-                                    <option value="13">Стефан Фёдорович Баранов</option>
-                                    <option value="14">Вадим Сергеевич Орехов</option>
-                                    <option value="15">Георгий Фёдорович Власов</option>
-                                    <option value="16">Oleg</option>
-                                    <option value="17">Oleg</option>
+                                    <option value="{{$selected['created_by_id']}}" >{{$selected['created_by_name']}}</option>
+                                    @foreach($creators as $creator)
+                                        <option value="{{$creator->created_by_id}}">{{$creator->creatorName}}</option>
+                                    @endforeach
                                 </select>
                                 <select class="rounded border-gray-300" name="filter[assigned_to_id]"
                                         id="filter[assigned_to_id]">
-                                    <option value="" selected="selected">Исполнитель</option>
-                                    <option value="1">Владимир Евгеньевич Михайлов</option>
-                                    <option value="2">Фаина Романовна Белоусова</option>
+                                    <option value="{{$selected['assigned_to_id']}}" >{{$selected['assigned_to_name']}}</option>
+                                    @foreach($assigneds as $assigned)
+                                    <option value="{{$assigned->assigned_to_id}}">{{$assigned->assignedName}}</option>
+                                    @endforeach
                                 </select>
                                 <button
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
@@ -47,9 +45,13 @@
                             </div>
                         </form>
                     </div>
-
+                    @auth()
                     <div class="ml-auto">
+                        <a href="/tasks/create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2">
+                            Создать задачу </a>
+
                     </div>
+                    @endauth
                 </div>
 
                 <table class="mt-4">
@@ -61,23 +63,41 @@
                         <th>Автор</th>
                         <th>Исполнитель</th>
                         <th>Дата создания</th>
+                        @auth()
+                            <th>Действия</th>
+                        @endauth
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($tasks as $task)
                     <tr class="border-b border-dashed text-left">
-                        <td>1</td>
-                        <td>в архиве</td>
+                        <td>{{$task->id}}</td>
+                        <td>{{$task->taskStatusesName}}</td>
                         <td>
-                            <a class="text-blue-600 hover:text-blue-900" href="/tasks/1">
-                                Исправить ошибку в какой-нибудь строке
+                            <a class="text-blue-600 hover:text-blue-900" href="/tasks/{{$task->id}}">
+                                {{$task->tasksName}}
                             </a>
                         </td>
-                        <td>Марк Александрович Авдеев</td>
-                        <td>Фаина Романовна Белоусова</td>
-                        <td>22.02.2025</td>
+                        <td>{{$task->creatorName}}</td>
+                        <td>{{$task->assignedName}}</td>
+                        <td>{{$task->created_at}}</td>
                         <td>
-                        </td>
+                        @auth()
+                            @if($task->created_by_id == auth()->user()->id)
+                                <form class="text-red-600 hover:text-blue-900"
+                                      action="/tasks/{{$task->id}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Уверены, что хотите удалить?')">
+                                        Удалить</button>
+                                </form>
+                            @endif
+                        <a href="/tasks/{{$task->id}}/edit" class="text-blue-600 hover:text-blue-900">
+                                Изменить                </a> </td>
+                        @endauth
                     </tr>
+                    @endforeach
 
                     </tbody>
                 </table>
