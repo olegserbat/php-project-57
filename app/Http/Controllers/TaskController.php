@@ -3,94 +3,58 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TaskStatus;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $filter = $request->input('filter');
-        $selected = [
+        $filterStart = [
             'created_by_id' => '',
             'status_id' => '',
-            'assigned_to_id' => '',
-            'created_by_name' => 'Автор',
-            'status_name' => 'Статус',
-            'assigned_to_name' => 'Исполнитель'
+            'assigned_to_id' => ''
         ];
-        $tasks = DB::table('tasks')
-            ->leftJoin('users', 'tasks.created_by_id', '=', 'users.id')
-            //->leftJoin('users', 'tasks.assigned_to_id', '=', 'users.id')
-            ->leftJoin('task_statuses', 'tasks.status_id', '=', 'task_statuses.id')
-            ->select('tasks.id',
-                'task_statuses.name as taskStatusesName',
-                'tasks.name as tasksName',
-                'users.name as creatorName',
-                'users.name as assignedName', // не работает
-                'tasks.created_at',
-                'tasks.created_by_id',
-                'tasks.status_id',
-                'tasks.assigned_to_id'
-            )->get();
-        $statuses = $tasks->unique('taskStatusesName');
-        $creators = $tasks->unique('creatorName');
-        $assigneds = $tasks->unique('assignedName');
-        if (isset($filter)) {
-            $creatorID = $filter['created_by_id'];
-            $statusID = $filter['status_id'];
-            $assignedID = $filter['assigned_to_id'];
-            $tasks = DB::table('tasks')
-                ->leftJoin('users', 'tasks.created_by_id', '=', 'users.id')
-                ->leftJoin('task_statuses', 'tasks.status_id', '=', 'task_statuses.id')
-                ->select('tasks.id',
-                    'task_statuses.name as taskStatusesName',
-                    'tasks.name as tasksName',
-                    'users.name as creatorName',
-                    'users.name as assignedName',
-                    'tasks.created_at',
-                    'tasks.created_by_id',
-                    'tasks.status_id',
-                    'tasks.assigned_to_id'
-                )->when($creatorID, function ($tasks, string $creatorID) {
-                    $tasks->where('tasks.created_by_id', $creatorID);
-                })->when($statusID, function ($tasks, string $statusID) {
-                    $tasks->where('tasks.status_id', $statusID);
-                })->when($assignedID, function ($tasks, string $assignedID) {
-                    $tasks->where('tasks.assigned_to_id', $assignedID);
-                })
-                ->get();
-            $selected['created_by_name'] = is_null($creatorID) ? 'Автор' : $tasks->filter(function ($item) use ($creatorID) {
-                return $item->created_by_id == $creatorID;
-            })->value('creatorName');
-            $selected[''] = is_null($statusID) ? 'Статус' : $tasks->filter(function ($item) use ($statusID) {
-                return $item->status_id == $statusID;
-            })->value('taskStatusesName');
-            $selected['assigned_to_name'] = is_null($assignedID) ? 'Исполнитель' : $tasks->filter(function ($item) use ($assignedID) {
-                return $item->assigned_to_id == $assignedID;
-            })->value('assignedName');
-            $selected['created_by_id'] = $creatorID;
-            $selected['status_id'] = $statusID;
-            $selected['assigned_to_id'] = $assignedID;
+        $filterRequest = ($request->input('filter') !== null) ? $request->input('filter') : [];
+        $filter = array_merge($filterStart, $filterRequest);
+        $users = User::all()->unique();
+        $statuses = TaskStatus::all()->unique();
+        $tasks = QueryBuilder::for(Task::class)
+            ->allowedFilters(
+                [
+                    AllowedFilter::exact('status_id'),
+                    AllowedFilter::exact('created_by_id'),
+                    AllowedFilter::exact('assigned_to_id')
+                ]
+            )
+            ->orderBy('created_at')
+            ->paginate(15)
+            ->map(function ($item) use ($users, $statuses) {
+                $item->creatorName = $users->where('id', $item->created_by_id)->first()->name;
+                $item->assignedName = $users->where('id', $item->assigned_to_id)->first()?->name;
+                $item->taskStatusesName = $statuses->where('id', $item->status_id)->first()->name;
+                return $item;
+            });
+        $userName = new User();
+        $statusName = new TaskStatus();
 
+        $filter['created_by_name'] = ($filter['created_by_id'] == '') ? 'Автор' :
+            $userName->where('id', $filter['created_by_id'])->first()->name;
+        $filter['assigned_to_name'] = ($filter['assigned_to_id'] == '') ? 'Исполнитель' :
+            $userName->where('id', $filter['assigned_to_id'])->first()->name;
+        $filter['status_name'] = ($filter['status_id'] == '') ? 'Статус' :
+            $statusName->where('id', $filter['status_id'])->first()->name;
 
-//            foreach ($filter as $keyFilter => $item) {
-//                if ($item !== null) {
-//
-//                    $tasks = $tasks->filter(function ($value) use ($keyFilter, $item) {
-//                        return $value->$keyFilter == $item;
-//                    });
-//                }
-//            }
-        }
         return view('/tasks', [
             'tasks' => $tasks,
             'statuses' => $statuses,
-            'creators' => $creators,
-            'assigneds' => $assigneds,
-            'selected' => $selected
+            'users' => $users,
+            'filter' => $filter
         ]);
-
     }
 
     public function create()
@@ -106,10 +70,10 @@ class TaskController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'status_id' => 'required',
-            'description' =>'nullable',
+            'description' => 'nullable',
             'assigned_to_id' => 'nullable'
         ]);
-        $data = $request->input();
+        //$data = $request->input();
         $task = new Task();
         $task->fill([
             'name' => $data['name'],
@@ -119,8 +83,56 @@ class TaskController extends Controller
             'assigned_to_id' => $data['assigned_to_id']
         ]);
         $task->save();
-        $request->session()->flash('status', 'Задача успешно создана');
+        $request->session()->flash('task', 'Задача успешно создана');
         return redirect()
             ->route('tasks.index');
+    }
+
+    public function edit($id)
+    {
+        $task = Task::findOrFail($id);
+        $status = new TaskStatus();
+        $task->statusName = $status->where('id', $task->status_id)->first()->name;
+        $user = new User();
+        $task->createdName = $user->where('id', $task->created_by_id)->first()->name;
+        $task->assignedName = $task->assigned_to_id ? $user->where('id', $task->assigned_to_id)->first()->name : '';
+        $statuses = TaskStatus::all();
+        $users = User::all();
+
+        return view('task_edit', ['task' => $task, 'statuses' => $statuses, 'users' => $users]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $task = Task::findOrFail($id);
+        $data = $request->validate([
+            'name' => 'required',
+            'status_id' => 'required',
+            'description' => 'nullable',
+            'assigned_to_id' => 'nullable'
+        ]);
+        $task->fill($data);
+        $task->save();
+        $request->session()->flash('task', 'Задача успешно изменена');
+        return redirect()
+            ->route('tasks.index');
+    }
+
+    public function destroy($id)
+    {
+        $task = Task::findOrFail($id);
+        if ($task) {
+            $task->delete();
+        }
+        return redirect()
+            ->route('tasks.index');
+    }
+
+    public function show($id)
+    {
+        $task = Task::findOrFail($id);
+        $status = new TaskStatus();
+        $task->statusName = $status->where('id', $task->status_id)->first()->name;
+        return view('task_show', ['task' => $task]);
     }
 }

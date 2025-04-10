@@ -36,6 +36,7 @@ Route::delete('/task_statuses/{id}', [TaskStatusController::class, 'destroy'])->
 
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
 Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('tasks.show');
 Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
 Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
 Route::patch('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');

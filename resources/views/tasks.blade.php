@@ -3,11 +3,11 @@
 
     <section class="bg-white">
         <div class="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
-            @if (session('status'))
+            @if (session('task'))
                 <div class="alert
                     alert-success
                     " role="alert">
-                    {{ session('status') }}
+                    {{ session('task') }}
                 </div>
             @endif
             <div class="grid col-span-full">
@@ -18,23 +18,24 @@
                         <form method="GET" action="/tasks">
                             <div class="flex">
                                 <select class="rounded border-gray-300" name="filter[status_id]" id="filter[status_id]">
-                                    <option value="{{$selected['status_id']}}" >{{$selected['status_name']}}</option>
+                                    <option value="{{$filter['status_id']}}" >{{$filter['status_name']}}</option>
+                                    <option value="" >Статус</option>
                                     @foreach($statuses as $status)
-                                        <option value="{{$status->status_id}}">{{$status->taskStatusesName}}</option>
+                                        <option value="{{$status->id}}">{{$status->name}}</option>
                                     @endforeach
                                 </select>
                                 <select class="rounded border-gray-300" name="filter[created_by_id]"
                                         id="filter[created_by_id]">
-                                    <option value="{{$selected['created_by_id']}}" >{{$selected['created_by_name']}}</option>
-                                    @foreach($creators as $creator)
-                                        <option value="{{$creator->created_by_id}}">{{$creator->creatorName}}</option>
+                                    <option value="{{$filter['created_by_id']}}" >{{$filter['created_by_name']}}</option>
+                                    @foreach($users as $user)
+                                        <option value="{{$user->id}}">{{$user->name}}</option>
                                     @endforeach
                                 </select>
                                 <select class="rounded border-gray-300" name="filter[assigned_to_id]"
                                         id="filter[assigned_to_id]">
-                                    <option value="{{$selected['assigned_to_id']}}" >{{$selected['assigned_to_name']}}</option>
-                                    @foreach($assigneds as $assigned)
-                                    <option value="{{$assigned->assigned_to_id}}">{{$assigned->assignedName}}</option>
+                                    <option value="{{$filter['assigned_to_id']}}" >{{$filter['assigned_to_name']}}</option>
+                                    @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
                                     @endforeach
                                 </select>
                                 <button
@@ -75,7 +76,7 @@
                         <td>{{$task->taskStatusesName}}</td>
                         <td>
                             <a class="text-blue-600 hover:text-blue-900" href="/tasks/{{$task->id}}">
-                                {{$task->tasksName}}
+                                {{$task->name}}
                             </a>
                         </td>
                         <td>{{$task->creatorName}}</td>
@@ -84,6 +85,14 @@
                         <td>
                         @auth()
                             @if($task->created_by_id == auth()->user()->id)
+{{--                                    <a class="mb-3 text-red-600 hover:text-red-900 cursor-pointer"--}}
+{{--                                       rel="nofollow"--}}
+{{--                                       data-method="delete"--}}
+{{--                                       data-confirm="{{ __('hexlet.confirm') }}"--}}
+{{--                                       href="{{ route('tasks.delete', $task) }}"--}}
+{{--                                    >--}}
+{{--                                        {{ __('hexlet.statuses.actions.delete') }}--}}
+{{--                                    </a>--}}
                                 <form class="text-red-600 hover:text-blue-900"
                                       action="/tasks/{{$task->id}}" method="POST">
                                     @csrf

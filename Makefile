@@ -2,7 +2,7 @@ install:
 	composer install
 
 lint:
-	./vendor/bin/phpcs -- -v --standard=PSR12  routes/web.php
+	./vendor/bin/phpcs -- -v --standard=PSR12  routes/web.php  app/Http/Controllers/TaskController.php
 test:
 	composer exec --verbose phpunit tests
 
