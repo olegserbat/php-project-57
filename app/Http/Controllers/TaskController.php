@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use function Laravel\Prompts\table;
 
 class TaskController extends Controller
 {
@@ -50,7 +49,6 @@ class TaskController extends Controller
     public function create()
     {
         $statuses = TaskStatus::all();
-        //$users = DB::table('users')->select('id as user_id', 'name as user_name')->get();
         $users = User::all();
         $labels = Label::all();
         return view('tasks.tasks_create', ['statuses' => $statuses, 'users' => $users, 'labels' => $labels]);
@@ -78,10 +76,9 @@ class TaskController extends Controller
         ]);
         DB::transaction(function () use ($task, $data) {
             $task->save();
-            if(isset($data['labels'])) {
+            if (isset($data['labels'])) {
                 $task->labeles()->attach($data['labels']);
             }
-
 //            $labels = [];
 //            foreach ($data['labels'] as $label){
 //                $labels[] = ['label_id'=>$label, 'task_id'=>$task->id];
@@ -111,8 +108,8 @@ class TaskController extends Controller
         return view('tasks.task_edit', ['task' => $task,
             'statuses' => $statuses,
             'users' => $users,
-            'allLabels'=>$allLabels,
-            'taskLabels'=>$taskLabels]);
+            'allLabels' => $allLabels,
+            'taskLabels' => $taskLabels]);
     }
 
     public function update(Request $request, $id)
@@ -128,7 +125,7 @@ class TaskController extends Controller
         $task->fill($data);
         DB::transaction(function () use ($task, $data) {
             $task->save();
-            if(isset($data['labels'])) {
+            if (isset($data['labels'])) {
                 $task->labeles()->sync($data['labels']);
             } else {
                 $task->labeles()->detach();

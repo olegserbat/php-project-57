@@ -20,7 +20,7 @@ class TaskFactory extends Factory
     {
         return [
             'name' => fake()->realText(rand(10, 20)),
-            'description'=> fake()->sentence(),
+            'description' => fake()->sentence(),
             //'status_id' => fake()->biasedNumberBetween(1, 1000),
             //'created_by_id' => fake()->biasedNumberBetween(1, 1000),
             'assigned_to_id' => null,

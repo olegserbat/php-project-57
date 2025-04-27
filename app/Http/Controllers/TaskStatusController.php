@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\TaskStatus;
+use Illuminate\Http\Request;
 
 class TaskStatusController extends Controller
 {
     public function index()
     {
         $taskStatuses = TaskStatus::paginate(15);
-        return view('task_statuses.task_statuses', ['taskStatuses'=>$taskStatuses]);
+        return view('task_statuses.task_statuses', ['taskStatuses' => $taskStatuses]);
     }
 
     public function create()
@@ -34,7 +34,7 @@ class TaskStatusController extends Controller
     public function edit($id)
     {
         $taskStatus = TaskStatus::findOrFail($id);
-        return view('task_statuses.task_statuses_edit', ['taskStatus'=>$taskStatus]);
+        return view('task_statuses.task_statuses_edit', ['taskStatus' => $taskStatus]);
     }
 
     public function update(Request $request, $id)
@@ -53,12 +53,11 @@ class TaskStatusController extends Controller
     public function destroy(Request $request, $id)
     {
         $taskStatus = TaskStatus::findOrFail($id);
-        if($taskStatus){
+        if ($taskStatus) {
             $taskStatus->delete();
             $request->session()->flash('status', 'Статус успешно удален');
         }
         return redirect()
             ->route('task_status.index');
     }
-
 }

@@ -18,7 +18,7 @@ class LabelFactory extends Factory
     {
         return [
             'name' => fake()->realText(rand(10, 20)),
-            'description'=> fake()->sentence(),
+            'description' => fake()->sentence(),
         ];
     }
 }

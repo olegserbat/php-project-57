@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Label;
 use Illuminate\Http\Request;
 
-class labelController extends Controller
+class LabelController extends Controller
 {
     public function index()
     {
         $labels = Label::paginate(15);
-        return view('labels.labels', ['labels'=>$labels]);
+        return view('labels.labels', ['labels' => $labels]);
     }
 
     public function create()
@@ -35,7 +35,7 @@ class labelController extends Controller
     public function edit($id)
     {
         $label = Label::findOrFail($id);
-        return view('labels.label_edit', ['label'=>$label]);
+        return view('labels.label_edit', ['label' => $label]);
     }
 
     public function update(Request $request, $id)
@@ -56,7 +56,7 @@ class labelController extends Controller
     {
         $label = Label::findOrFail($id);
         $tasks = $label->tasks->toArray();
-        if($label AND !$tasks){
+        if ($label and !$tasks) {
             $label->delete();
             $request->session()->flash('labels', 'Метка успешно удалена');
         } else {

@@ -1,15 +1,14 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaskStatusController;
-use App\Http\Controllers\TaskController;
 use App\Http\Controllers\labelController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskStatusController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('main');
 })->name('main');
-
 
 
 //Route::get('/dashboard', function () {
@@ -49,4 +48,3 @@ Route::post('/labels', [labelController::class, 'store'])->name('labels.store');
 Route::get('/labels/{id}/edit', [labelController::class, 'edit'])->name('labels.edit');
 Route::patch('/labels/{id}', [labelController::class, 'update'])->name('labels.update');
 Route::delete('/labels/{id}', [labelController::class, 'destroy'])->name('labels.delete');
-
