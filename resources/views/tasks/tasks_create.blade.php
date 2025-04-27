@@ -33,7 +33,7 @@
                             <select class="rounded border-gray-300 w-1/3" name="status_id" id="status_id">
                                 <option value="" selected="selected"></option>
                                 @foreach($statuses as $status)
-                                    <option value="{{$status->status_id}}">{{$status->status_name}}</option>
+                                    <option value="{{$status->id}}">{{$status->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -49,18 +49,17 @@
                             <select class="rounded border-gray-300 w-1/3" name="assigned_to_id" id="assigned_to_id">
                                 <option value="" selected="selected"></option>
                                 @foreach($users as $user)
-                                    <option value="{{$user->user_id}}">{{$user->user_name}}</option>
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
                                 @endforeach
                             </select>
                         <div class="mt-2">
                             <label for="status_id">Метки</label>
                         </div>
                         <div>
-                            <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple="">
-                                <option value="1">ошибка</option>
-                                <option value="2">документация</option>
-                                <option value="3">дубликат</option>
-                                <option value="4">доработка</option>
+                            <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple>
+                                @foreach($labels as $label)
+                                <option value="{{$label->id}}">{{$label->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mt-2">

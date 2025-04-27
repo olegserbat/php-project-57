@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
@@ -9,11 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use function Laravel\Prompts\table;
 
 class TaskController extends Controller
 {
     public function index(Request $request)
     {
+
         $filterStart = [
             'created_by_id' => '',
             'status_id' => '',
@@ -33,23 +36,10 @@ class TaskController extends Controller
             )
             ->orderBy('created_at')
             ->paginate(15)
-            ->map(function ($item) use ($users, $statuses) {
-                $item->creatorName = $users->where('id', $item->created_by_id)->first()->name;
-                $item->assignedName = $users->where('id', $item->assigned_to_id)->first()?->name;
-                $item->taskStatusesName = $statuses->where('id', $item->status_id)->first()->name;
-                return $item;
-            });
-        $userName = new User();
-        $statusName = new TaskStatus();
+            ->appends('filter', $filter);
 
-        $filter['created_by_name'] = ($filter['created_by_id'] == '') ? 'Автор' :
-            $userName->where('id', $filter['created_by_id'])->first()->name;
-        $filter['assigned_to_name'] = ($filter['assigned_to_id'] == '') ? 'Исполнитель' :
-            $userName->where('id', $filter['assigned_to_id'])->first()->name;
-        $filter['status_name'] = ($filter['status_id'] == '') ? 'Статус' :
-            $statusName->where('id', $filter['status_id'])->first()->name;
 
-        return view('/tasks', [
+        return view('tasks.tasks', [
             'tasks' => $tasks,
             'statuses' => $statuses,
             'users' => $users,
@@ -59,9 +49,11 @@ class TaskController extends Controller
 
     public function create()
     {
-        $statuses = DB::table('task_statuses')->select('id as status_id', 'name as status_name')->get();
-        $users = DB::table('users')->select('id as user_id', 'name as user_name')->get();
-        return view('tasks_create', ['statuses' => $statuses, 'users' => $users]);
+        $statuses = TaskStatus::all();
+        //$users = DB::table('users')->select('id as user_id', 'name as user_name')->get();
+        $users = User::all();
+        $labels = Label::all();
+        return view('tasks.tasks_create', ['statuses' => $statuses, 'users' => $users, 'labels' => $labels]);
     }
 
     public function store(Request $request)
@@ -71,18 +63,31 @@ class TaskController extends Controller
             'name' => 'required',
             'status_id' => 'required',
             'description' => 'nullable',
-            'assigned_to_id' => 'nullable'
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable',
         ]);
-        //$data = $request->input();
+        //$data['labels'] = (isset($data['labels'])) ? json_encode($data['labels']) : null;
         $task = new Task();
         $task->fill([
             'name' => $data['name'],
             'description' => $data['description'],
             'status_id' => $data['status_id'],
             'created_by_id' => $createdById,
-            'assigned_to_id' => $data['assigned_to_id']
+            'assigned_to_id' => $data['assigned_to_id'],
+            //'labels' => $data['labels'],
         ]);
-        $task->save();
+        DB::transaction(function () use ($task, $data) {
+            $task->save();
+            if(isset($data['labels'])) {
+                $task->labeles()->attach($data['labels']);
+            }
+
+//            $labels = [];
+//            foreach ($data['labels'] as $label){
+//                $labels[] = ['label_id'=>$label, 'task_id'=>$task->id];
+//            }
+//            DB::table('label_task')->insert($labels);
+        });
         $request->session()->flash('task', 'Задача успешно создана');
         return redirect()
             ->route('tasks.index');
@@ -98,8 +103,16 @@ class TaskController extends Controller
         $task->assignedName = $task->assigned_to_id ? $user->where('id', $task->assigned_to_id)->first()->name : '';
         $statuses = TaskStatus::all();
         $users = User::all();
-
-        return view('task_edit', ['task' => $task, 'statuses' => $statuses, 'users' => $users]);
+        $allLabels = Label::all();
+        $taskLabels = $task->labeles;
+        $taskLabels = $taskLabels->map(function ($label) {
+            return $label->name;
+        })->toArray();
+        return view('tasks.task_edit', ['task' => $task,
+            'statuses' => $statuses,
+            'users' => $users,
+            'allLabels'=>$allLabels,
+            'taskLabels'=>$taskLabels]);
     }
 
     public function update(Request $request, $id)
@@ -109,20 +122,29 @@ class TaskController extends Controller
             'name' => 'required',
             'status_id' => 'required',
             'description' => 'nullable',
-            'assigned_to_id' => 'nullable'
+            'assigned_to_id' => 'nullable',
+            'labels' => 'nullable',
         ]);
         $task->fill($data);
-        $task->save();
+        DB::transaction(function () use ($task, $data) {
+            $task->save();
+            if(isset($data['labels'])) {
+                $task->labeles()->sync($data['labels']);
+            } else {
+                $task->labeles()->detach();
+            }
+        });
         $request->session()->flash('task', 'Задача успешно изменена');
         return redirect()
             ->route('tasks.index');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $task = Task::findOrFail($id);
         if ($task) {
             $task->delete();
+            $request->session()->flash('task', 'Задача успешно удалена');
         }
         return redirect()
             ->route('tasks.index');
@@ -133,6 +155,6 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $status = new TaskStatus();
         $task->statusName = $status->where('id', $task->status_id)->first()->name;
-        return view('task_show', ['task' => $task]);
+        return view('tasks.task_show', ['task' => $task]);
     }
 }

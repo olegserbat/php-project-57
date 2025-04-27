@@ -48,7 +48,7 @@
                         </div>
                         <div>
                             <select class="rounded border-gray-300 w-1/3" name="assigned_to_id" id="assigned_to_id">
-                                <option value="{{$task->assigned_to_id}}" selected="selected">{{$task->assignedName}}</option>
+                                <option value="{{$task->assigned_to_id}}" selected>{{$task->assignedName}}</option>
                                 @foreach($users as $user)
                                     <option value="{{$user->id}}">{{$user->name}}</option>
                                 @endforeach
@@ -58,10 +58,14 @@
                             </div>
                             <div>
                                 <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple="">
-                                    <option value="1">ошибка</option>
-                                    <option value="2">документация</option>
-                                    <option value="3">дубликат</option>
-                                    <option value="4">доработка</option>
+                                    @foreach($allLabels as $label)
+                                        @if(in_array($label->name, (array) $taskLabels ))
+                                    <option value="{{$label->id}}" selected>{{$label->name}}</option>
+                                        @else
+                                            <option value="{{$label->id}}">{{$label->name}}</option>
+                                        @endif
+                                    @endforeach
+
                                 </select>
                             </div>
                             <div class="mt-2">

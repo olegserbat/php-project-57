@@ -9,13 +9,13 @@ class TaskStatusController extends Controller
 {
     public function index()
     {
-        $taskStatuses = TaskStatus::paginate();
-        return view('task_statuses', ['taskStatuses'=>$taskStatuses]);
+        $taskStatuses = TaskStatus::paginate(15);
+        return view('task_statuses.task_statuses', ['taskStatuses'=>$taskStatuses]);
     }
 
     public function create()
     {
-        return view('task_statuses_create');
+        return view('task_statuses.task_statuses_create');
     }
 
     public function store(Request $request)
@@ -34,7 +34,7 @@ class TaskStatusController extends Controller
     public function edit($id)
     {
         $taskStatus = TaskStatus::findOrFail($id);
-        return view('task_statuses_edit', ['taskStatus'=>$taskStatus]);
+        return view('task_statuses.task_statuses_edit', ['taskStatus'=>$taskStatus]);
     }
 
     public function update(Request $request, $id)
@@ -50,11 +50,12 @@ class TaskStatusController extends Controller
             ->route('task_status.index');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $taskStatus = TaskStatus::findOrFail($id);
         if($taskStatus){
             $taskStatus->delete();
+            $request->session()->flash('status', 'Статус успешно удален');
         }
         return redirect()
             ->route('task_status.index');
