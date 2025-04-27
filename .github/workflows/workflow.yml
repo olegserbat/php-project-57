@@ -27,6 +27,8 @@ jobs:
       - name: Install
         # Install project
         run: make install
+      - name: Seeders
+        run: make seeders
       - name: Run linter
         # Run Linter
         run: make lint

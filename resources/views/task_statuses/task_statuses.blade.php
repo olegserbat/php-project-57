@@ -9,6 +9,13 @@
                 {{ session('status') }}
             </div>
             @endif
+                @if(session('alert'))
+                    <div class="alert
+                    alert-danger
+                    " role="alert">
+                        {{session('alert')}}
+                    </div>
+                @endif
             <div class="grid col-span-full">
                 <h1 class="mb-5">Статусы</h1>
                 @auth()
