@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Label;
+use App\Models\Task;
+use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -47,11 +49,23 @@ class LabelTest extends TestCase
 
     public function testDestroy(): void
     {
+        //deleted
         $user = User::factory()->create();
         $data = Label::factory()->make()->toArray();
+        $tasStatus = TaskStatus::factory()->create();
         $this->actingAs($user)->post('/labels', $data);
         $label = Label::where('name', $data['name'])->first();
         $response = $this->actingAs($user)->delete("/labels/{$label->id}");
+        $this->assertDatabaseMissing('labels', [
+            'name'=>$label->name,
+        ]);
         $response->assertSessionHas('labels');
+        //undeleted
+        $label2 = Label::factory()->create();
+        $task = Task::factory()->for($user, 'creator')->create(['status_id'=>$tasStatus->id]);
+        $task->labeles()->attach([$label2->id]);
+        $response = $this->actingAs($user)->delete("/labels/{$label2->id}");
+        $response->assertSessionHas('alert');
+        $this->assertDatabaseHas('labels', ['name' => $label2->name]);
     }
 }

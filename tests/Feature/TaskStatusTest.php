@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -52,14 +53,23 @@ class TaskStatusTest extends TestCase
 
     public function testDestroy(): void
     {
+        //deleted
         $user = User::factory()->create();
         $data = ['name' => 'normal'];
         $this->actingAs($user)->post('/task_statuses', $data);
-        $taskStatus = TaskStatus::where('name', 'normal')->first();
-        $response = $this->actingAs($user)->delete("/task_statuses/{$taskStatus->id}");
+        $taskStatus1 = TaskStatus::where('name', 'normal')->first();
+        $response = $this->actingAs($user)->delete("/task_statuses/{$taskStatus1->id}");
         $this->assertDatabaseMissing('tasks', [
-            'name'=>$taskStatus->name,
+            'name'=>$taskStatus1->name,
         ]);
         $response->assertSessionHas('status');
+
+        //undeleted
+        $this->actingAs($user)->post('/task_statuses', $data);
+        $taskStatus2 = TaskStatus::where('name', 'normal')->first();
+        $task = Task::factory()->for($user, 'creator')->create(['status_id' => $taskStatus2->id]);
+        $response = $this->actingAs($user)->delete("/task_statuses/{$taskStatus2->id}");
+        $this->assertDatabaseHas('task_statuses', $data);
+        $response->assertSessionHas('alert');
     }
 }
