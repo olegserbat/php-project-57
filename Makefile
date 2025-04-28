@@ -1,4 +1,5 @@
 install:
+	touch ./database/database.sqlite
 	composer install
 
 lint:

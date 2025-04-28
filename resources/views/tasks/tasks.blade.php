@@ -93,26 +93,26 @@
                             <td>
                                 @auth()
                                     @if($task->created_by_id == auth()->user()->id)
-                                        {{--                                    <a class="mb-3 text-red-600 hover:text-red-900 cursor-pointer"--}}
-                                        {{--                                       rel="nofollow"--}}
-                                        {{--                                       data-method="delete"--}}
-                                        {{--                                       data-confirm="{{ __('hexlet.confirm') }}"--}}
-                                        {{--                                       href="{{ route('tasks.delete', $task) }}"--}}
-                                        {{--                                    >--}}
-                                        {{--                                        {{ __('hexlet.statuses.actions.delete') }}--}}
-                                        {{--                                    </a>--}}
-                                        <form class="text-red-600 hover:text-blue-900"
-                                              action="/tasks/{{$task->id}}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Уверены, что хотите удалить?')">
+                                    <td class="border-b border-dashed text-left">
+                                            <a href="/tasks/{{$task->id}}"
+                                               data-confirm="Уверены, что хотите удалить?"
+                                               data-method="delete" style="color: red"
+                                               rel="nofollow">
                                                 Удалить
-                                            </button>
-                                        </form>
+                                            </a>  |
+{{--                                        <form class="text-red-600 hover:text-blue-900"--}}
+{{--                                              action="/tasks/{{$task->id}}" method="POST">--}}
+{{--                                            @csrf--}}
+{{--                                            @method('DELETE')--}}
+{{--                                            <button type="submit" class="btn btn-danger btn-sm"--}}
+{{--                                                    onclick="return confirm('Уверены, что хотите удалить?')">--}}
+{{--                                                Удалить--}}
+{{--                                            </button>--}}
+{{--                                        </form>--}}
                                     @endif
                                     <a href="/tasks/{{$task->id}}/edit" class="text-blue-600 hover:text-blue-900">
-                                        Изменить </a></td>
+                                        Изменить </a>
+                                    </td>
                             @endauth
                         </tr>
                     @endforeach

@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+{{--    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
+{{--    @vite(['resources/css/app.css', 'resources/js/app.js'])--}}
 
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="YIhgJCewwXIRgNZRPjDdvhNJPdjtbyZYvhqoQjBM">
-    <meta name="csrf-param" content="_token">
+
 
     <title>Менеджер задач</title>
 
@@ -71,5 +72,9 @@
     @yield('content')
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@rails/ujs@6.1.4/lib/assets/compiled/rails-ujs.js"></script>
+<script>
+    Rails.start();
+</script>
 </body>
 </html>
