@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\labelController;
+use App\Http\Controllers\LabelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskStatusController;
@@ -42,9 +42,9 @@ Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edi
 Route::patch('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
 Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.delete');
 
-Route::get('/labels', [labelController::class, 'index'])->name('labels.index');
-Route::get('/labels/create', [labelController::class, 'create'])->name('labels.create');
-Route::post('/labels', [labelController::class, 'store'])->name('labels.store');
-Route::get('/labels/{id}/edit', [labelController::class, 'edit'])->name('labels.edit');
-Route::patch('/labels/{id}', [labelController::class, 'update'])->name('labels.update');
-Route::delete('/labels/{id}', [labelController::class, 'destroy'])->name('labels.delete');
+Route::get('/labels', [LabelController::class, 'index'])->name('labels.index');
+Route::get('/labels/create', [LabelController::class, 'create'])->name('labels.create');
+Route::post('/labels', [LabelController::class, 'store'])->name('labels.store');
+Route::get('/labels/{id}/edit', [LabelController::class, 'edit'])->name('labels.edit');
+Route::patch('/labels/{id}', [LabelController::class, 'update'])->name('labels.update');
+Route::delete('/labels/{id}', [LabelController::class, 'destroy'])->name('labels.delete');
