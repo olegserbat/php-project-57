@@ -1,6 +1,8 @@
 install:
 	touch ./database/database.sqlite
 	composer install
+	php artisan key:generate
+	php artisan optimize:clear
 
 lint:
 	./vendor/bin/phpcs -- -v --standard=PSR12  routes/web.php  app/Http/Controllers/TaskController.php app/Http/Controllers/TaskStatusController.php app/Http/Controllers/LabelController.php
