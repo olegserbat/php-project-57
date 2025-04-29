@@ -49,14 +49,20 @@
                         <td>{{$label->created_at}}</td>
                         @auth()
                             <td>
-                                <form class="text-red-600 hover:text-blue-900"
-                                      action="/labels/{{$label->id}}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Уверены, что хотите удалить?')">
-                                        Удалить</button>
-                                </form>
+                                <a href="{{route('labels.delete', ['id'=> $label->id, '_token' => csrf_token()])}}"
+                                   data-confirm="Уверены, что хотите удалить?"
+                                   data-method="delete" style="color: red"
+                                   rel="nofollow">
+                                    Удалить
+                                </a> |
+{{--                                <form class="text-red-600 hover:text-blue-900"--}}
+{{--                                      action="/labels/{{$label->id}}" method="POST">--}}
+{{--                                    @csrf--}}
+{{--                                    @method('DELETE')--}}
+{{--                                    <button type="submit" class="btn btn-danger btn-sm"--}}
+{{--                                            onclick="return confirm('Уверены, что хотите удалить?')">--}}
+{{--                                        Удалить</button>--}}
+{{--                                </form>--}}
                                 <a class="text-blue-600 hover:text-blue-900" href="/labels/{{$label->id}}/edit">
                                     Изменить </a>
                             </td>
