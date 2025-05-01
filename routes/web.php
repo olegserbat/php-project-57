@@ -23,9 +23,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/tasks', function () {
-    return view('tasks');
-});
+//Route::get('/tasks', function () {
+//    return view('tasks');
+//});
 
 Route::get('/task_statuses', [TaskStatusController::class, 'index'])->name('task_status.index');
 Route::get('/task_statuses/create', [TaskStatusController::class, 'create'])->name('task_status.create');
