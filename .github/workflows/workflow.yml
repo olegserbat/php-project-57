@@ -33,6 +33,20 @@ jobs:
       - name: Run Test
         # Run test
         run: make test
+        # Run Sonar
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@v5
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        with:
+#          # NOTE: https://sonarcloud.io/project/information?id=<organization>_<reponame>
+#          args: >
+#            -Dsonar.projectKey=olegserbat_php-project-57
+#            -Dsonar.organization=olegserbat
+#            -Dsonar.sources=src/
+#            -Dsonar.php.coverage.reportPaths=build/logs/clover.xml
+
+
 #      - name: Seeders
 #        run: make seeders
       # Publish code coverage on Code Climate

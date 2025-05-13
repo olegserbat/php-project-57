@@ -8,6 +8,7 @@ use App\Models\TaskStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -15,7 +16,6 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-
         $filterStart = [
             'created_by_id' => '',
             'status_id' => '',
@@ -58,9 +58,9 @@ class TaskController extends Controller
     {
         $createdById = auth()->user()->id;
         $data = $request->validate([
-            'name' => 'required',
+            'name' => 'required | max:255',
             'status_id' => 'required',
-            'description' => 'nullable',
+            'description' => 'nullable | max:255',
             'assigned_to_id' => 'nullable',
             'labels' => 'nullable',
         ]);
@@ -116,9 +116,9 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
         $data = $request->validate([
-            'name' => 'required',
+            'name' => 'required | max:255',
             'status_id' => 'required',
-            'description' => 'nullable',
+            'description' => 'nullable | max:255',
             'assigned_to_id' => 'nullable',
             'labels' => 'nullable',
         ]);

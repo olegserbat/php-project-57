@@ -21,8 +21,8 @@ class LabelController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
-            'description' => 'nullable',
+            'name' => 'required | max:255',
+            'description' => 'nullable | max:255',
         ]);
         $label = new Label();
         $label->fill($data);
@@ -42,8 +42,8 @@ class LabelController extends Controller
     {
         $label = Label::findOrFail($id);
         $data = $request->validate([
-            'name' => 'required',
-            'description' => 'nullable',
+            'name' => 'required | max:255',
+            'description' => 'nullable | max:255',
         ]);
         $label->fill($data);
         $label->save();
