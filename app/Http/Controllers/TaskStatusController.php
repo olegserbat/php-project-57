@@ -57,7 +57,7 @@ class TaskStatusController extends Controller
         $tasks = $tasks->toArray();
         if ($taskStatus and !$tasks) {
             $taskStatus->delete();
-            $request->session()->flash('status', 'Статус успешно удален');
+            $request->session()->flash('status', 'Статус успешно удалён');
         } else {
             $request->session()->flash('alert', 'Не удалось удалить статус');
         }
