@@ -31,11 +31,16 @@
                     <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Менеджер задач</span>
                 </a>
                 @auth
-                    <div class="flex items-center lg:order-2">
-                        <form action="/logout" method="post" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            @csrf
-                            <input type="submit" value="Выход">
-                        </form>
+                    <div class="flex items-center lg:order-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <a href="{{route('logout', ['_token' => csrf_token()])}}"
+                           data-method="post"
+                           rel="nofollow">
+                            Выход
+                        </a>
+{{--                        <form action="/logout" method="post" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">--}}
+{{--                            @csrf--}}
+{{--                            <input type="submit" value="Выход">--}}
+{{--                        </form>--}}
                     </div>
                 @endauth
                 @guest
