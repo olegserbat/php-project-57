@@ -178,6 +178,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'name' => [
+            'unique' => 'Статус с таким именем уже существует'
+        ]
     ],
 
     /*

@@ -21,7 +21,11 @@ class LabelController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required | max:255',
+            'name' => [
+                'required',
+                'unique:App\Models\Label,name',
+                'max:255'
+            ],
             'description' => 'nullable | max:255',
         ]);
         $label = new Label();

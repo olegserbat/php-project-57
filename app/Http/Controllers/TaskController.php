@@ -58,7 +58,11 @@ class TaskController extends Controller
     {
         $createdById = auth()->user()->id;
         $data = $request->validate([
-            'name' => 'required | max:255',
+            'name' => [
+                'required',
+                'unique:App\Models\Task,name',
+                'max:255'
+            ],
             'status_id' => 'required',
             'description' => 'nullable | max:255',
             'assigned_to_id' => 'nullable',

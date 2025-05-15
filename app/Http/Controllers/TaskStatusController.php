@@ -21,7 +21,11 @@ class TaskStatusController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required | unique:App\Models\TaskStatus | max:255',
+            'name' => [
+                'required',
+                'unique:App\Models\TaskStatus,name',
+                'max:255'
+            ]
         ]);
         $taskStatus = new TaskStatus();
         $taskStatus->fill($data);
@@ -43,7 +47,6 @@ class TaskStatusController extends Controller
         $data = $request->validate([
             'name' => [
                 'required',
-                'unique:App\Models\TaskStatus,name',
                 'max:255'
                 ]
         ]);
