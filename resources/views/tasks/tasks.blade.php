@@ -89,7 +89,7 @@
                             </td>
                             <td>{{ $task->creator->name}}</td>
                             <td>{{$task->assign->name ?? ''}}</td>
-                            <td>{{$task->created_at}}</td>
+                            <td>{{$task->created_at->format('d.m.Y')}}</td>
                             <td>
                                 @auth()
                                     @if($task->created_by_id == auth()->user()->id)
