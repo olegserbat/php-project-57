@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLabelRequest;
 use App\Models\Label;
 use Illuminate\Http\Request;
 
@@ -18,16 +19,9 @@ class LabelController extends Controller
         return view('labels.labels_create');
     }
 
-    public function store(Request $request)
+    public function store(StoreLabelRequest $request)
     {
-        $data = $request->validate([
-            'name' => [
-                'required',
-                'unique:App\Models\Label,name',
-                'max:255'
-            ],
-            'description' => 'nullable | max:255',
-        ]);
+        $data = $request->validated();
         $label = new Label();
         $label->fill($data);
         $label->save();
@@ -42,13 +36,10 @@ class LabelController extends Controller
         return view('labels.label_edit', ['label' => $label]);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreLabelRequest $request, $id)
     {
         $label = Label::findOrFail($id);
-        $data = $request->validate([
-            'name' => 'required | max:255',
-            'description' => 'nullable | max:255',
-        ]);
+        $data = $request->validated();
         $label->fill($data);
         $label->save();
         $request->session()->flash('labels', 'Метка успешно изменена');

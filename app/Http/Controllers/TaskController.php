@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreTaskRequest;
 use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
@@ -54,20 +55,10 @@ class TaskController extends Controller
         return view('tasks.tasks_create', ['statuses' => $statuses, 'users' => $users, 'labels' => $labels]);
     }
 
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
         $createdById = auth()->user()->id;
-        $data = $request->validate([
-            'name' => [
-                'required',
-                'unique:App\Models\Task,name',
-                'max:255'
-            ],
-            'status_id' => 'required',
-            'description' => 'nullable | max:255',
-            'assigned_to_id' => 'nullable',
-            'labels' => 'nullable',
-        ]);
+        $data = $request->validated();
         //$data['labels'] = (isset($data['labels'])) ? json_encode($data['labels']) : null;
         $task = new Task();
         $task->fill([
@@ -116,16 +107,10 @@ class TaskController extends Controller
             'taskLabels' => $taskLabels]);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreTaskRequest $request, $id)
     {
         $task = Task::findOrFail($id);
-        $data = $request->validate([
-            'name' => 'required | max:255',
-            'status_id' => 'required',
-            'description' => 'nullable | max:255',
-            'assigned_to_id' => 'nullable',
-            'labels' => 'nullable',
-        ]);
+        $data = $request->validated();
         $task->fill($data);
         DB::transaction(function () use ($task, $data) {
             $task->save();
