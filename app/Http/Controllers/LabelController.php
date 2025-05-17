@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLabelRequest;
 use App\Models\Label;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\isEmpty;
 
 class LabelController extends Controller
 {
