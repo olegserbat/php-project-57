@@ -8,7 +8,7 @@
                     Просмотр задачи: {{$task->name}}        <a href="https://tasks/{{$task->id}}/edit">⚙</a>
                 </h2>
                 <p><span class="font-black">Имя:</span> {{$task->name}}</p>
-                <p><span class="font-black">Статус:</span> {{$task->statusName}}</p>
+                <p><span class="font-black">Статус:</span> {{$task->status->name}}</p>
                 <p><span class="font-black">Описание:</span> {{$task->description}}</p>
                 <p><span class="font-black">Метки:</span></p>
                 <div>

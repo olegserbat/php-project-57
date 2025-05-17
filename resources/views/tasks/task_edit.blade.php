@@ -32,7 +32,7 @@
                         </div>
                         <div>
                             <select class="rounded border-gray-300 w-1/3" name="status_id" id="status_id">
-                                <option value={{$task->status_id}} selected="selected">{{$task->statusName}}</option>
+                                <option value={{$task->status_id}} selected="selected">{{$task->status->name}}</option>
                                 @foreach($statuses as $status)
                                     <option value="{{$status->id}}">{{$status->name}}</option>
                                 @endforeach
@@ -48,7 +48,7 @@
                         </div>
                         <div>
                             <select class="rounded border-gray-300 w-1/3" name="assigned_to_id" id="assigned_to_id">
-                                <option value="{{$task->assigned_to_id}}" selected>{{$task->assignedName}}</option>
+                                <option value="{{$task->assigned_to_id}}" selected>{{$task->assign?->name ?? ''}}</option>
                                 @foreach($users as $user)
                                     <option value="{{$user->id}}">{{$user->name}}</option>
                                 @endforeach
@@ -59,13 +59,11 @@
                             <div>
                                 <select class="rounded border-gray-300 w-1/3 h-32" name="labels[]" id="labels[]" multiple="">
                                     @foreach($allLabels as $label)
-                                        @if(in_array($label->name, (array) $taskLabels ))
-                                    <option value="{{$label->id}}" selected>{{$label->name}}</option>
-                                        @else
-                                            <option value="{{$label->id}}">{{$label->name}}</option>
-                                        @endif
+                                    <option value="{{$label->id}}"
+                                            @if(in_array($label->name, $task->labeles->pluck('name')->all()))
+                                        selected
+                                        @endif>{{$label->name}}</option>
                                     @endforeach
-
                                 </select>
                             </div>
                             <div class="mt-2">

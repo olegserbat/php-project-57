@@ -50,8 +50,8 @@ class LabelController extends Controller
     public function destroy(Request $request, $id)
     {
         $label = Label::findOrFail($id);
-        $tasks = $label->tasks->toArray();
-        if ($label && empty($tasks)) {
+        $tasks = $label->tasks;
+        if ($tasks->count() === 0) {
             $label->delete();
             $request->session()->flash('labels', 'Метка успешно удалена');
         } else {

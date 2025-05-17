@@ -57,8 +57,7 @@ class TaskStatusController extends Controller
     {
         $taskStatus = TaskStatus::findOrFail($id);
         $tasks = $taskStatus->tasks;
-        $tasks = $tasks->toArray();
-        if ($taskStatus and !$tasks) {
+        if ($tasks->count() === 0) {
             $taskStatus->delete();
             $request->session()->flash('status', 'Статус успешно удалён');
         } else {

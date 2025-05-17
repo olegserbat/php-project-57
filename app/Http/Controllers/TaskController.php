@@ -88,23 +88,14 @@ class TaskController extends Controller
     public function edit($id)
     {
         $task = Task::findOrFail($id);
-        $status = new TaskStatus();
-        $task->statusName = $status->where('id', $task->status_id)->first()->name;
-        $user = new User();
-        $task->createdName = $user->where('id', $task->created_by_id)->first()->name;
-        $task->assignedName = $task->assigned_to_id ? $user->where('id', $task->assigned_to_id)->first()->name : '';
         $statuses = TaskStatus::all();
         $users = User::all();
         $allLabels = Label::all();
-        $taskLabels = $task->labeles;
-        $taskLabels = $taskLabels->map(function ($label) {
-            return $label->name;
-        })->toArray();
         return view('tasks.task_edit', ['task' => $task,
             'statuses' => $statuses,
             'users' => $users,
             'allLabels' => $allLabels,
-            'taskLabels' => $taskLabels]);
+        ]);
     }
 
     public function update(StoreTaskRequest $request, $id)
@@ -128,10 +119,8 @@ class TaskController extends Controller
     public function destroy(Request $request, $id)
     {
         $task = Task::findOrFail($id);
-        if ($task) {
-            $task->delete();
-            $request->session()->flash('task', 'Задача успешно удалена');
-        }
+        $task->delete();
+        $request->session()->flash('task', 'Задача успешно удалена');
         return redirect()
             ->route('tasks.index');
     }
@@ -139,8 +128,6 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::findOrFail($id);
-        $status = new TaskStatus();
-        $task->statusName = $status->where('id', $task->status_id)->first()->name;
         return view('tasks.task_show', ['task' => $task]);
     }
 }
