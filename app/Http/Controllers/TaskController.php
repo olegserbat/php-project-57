@@ -36,8 +36,7 @@ class TaskController extends Controller
             )
             ->orderBy('created_at')
             ->paginate(15)
-            ->appends('filter', $filter);
-
+            ->withQueryString();
 
         return view('tasks.tasks', [
             'tasks' => $tasks,
