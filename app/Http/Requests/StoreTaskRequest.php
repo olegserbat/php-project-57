@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -21,10 +22,14 @@ class StoreTaskRequest extends FormRequest
      */
     public function rules(): array
     {
+        $uniq = Rule::unique('tasks');
+        if ($this->route('id')){
+            $uniq = $uniq->ignore($this->route('id'));
+        }
         return [
             'name' => [
                 'required',
-                'unique:App\Models\Task,name',
+                $uniq,
                 'max:255',
                 'string',
             ],
