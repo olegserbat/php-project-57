@@ -23,7 +23,7 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         $uniq = Rule::unique('tasks');
-        if ($this->route('id')){
+        if ($this->route('id')) {
             $uniq = $uniq->ignore($this->route('id'));
         }
         return [
