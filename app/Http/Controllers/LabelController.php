@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLabelRequest;
 use App\Models\Label;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isEmpty;
 
 class LabelController extends Controller
 {
@@ -51,7 +52,7 @@ class LabelController extends Controller
     {
         $label = Label::findOrFail($id);
         $tasks = $label->tasks->toArray();
-        if ($label and !$tasks) {
+        if ($label && empty($tasks)) {
             $label->delete();
             $request->session()->flash('labels', 'Метка успешно удалена');
         } else {
