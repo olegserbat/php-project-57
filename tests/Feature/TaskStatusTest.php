@@ -41,14 +41,13 @@ class TaskStatusTest extends TestCase
         $data = ['name' => 'normal'];
         $this->actingAs($user)->post('/task_statuses', $data);
         $this->assertDatabaseHas('task_statuses', $data);
-        $newData = ['name'=>'good'];
+        $newData = ['name' => 'good'];
         $taskStatus = TaskStatus::where('name', 'normal')->first()->toArray();
         $id = $taskStatus['id'];
         $response = $this->actingAs($user)->patch("/task_statuses/{$id}", $newData);
         $newTaskStatus = TaskStatus::find($id)->toArray();
         $this->assertEquals('good', $newTaskStatus['name']);
         $response->assertSessionHas('status');
-
     }
 
     public function testDestroy(): void
@@ -60,7 +59,7 @@ class TaskStatusTest extends TestCase
         $taskStatus1 = TaskStatus::where('name', 'normal')->first();
         $response = $this->actingAs($user)->delete("/task_statuses/{$taskStatus1->id}");
         $this->assertDatabaseMissing('tasks', [
-            'name'=>$taskStatus1->name,
+            'name' => $taskStatus1->name,
         ]);
         $response->assertSessionHas('status');
 

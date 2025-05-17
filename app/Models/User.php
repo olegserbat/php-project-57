@@ -47,12 +47,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function CreatorTasks(): HasMany
+    public function creatorTasks(): HasMany
     {
         return $this->hasMany('App\Models\Task', 'created_by_id');
     }
 
-    public function AssighTasks(): HasMany
+    public function assighTasks(): HasMany
     {
         return $this->hasMany('App\Models\Task', 'assigned_to_id');
     }

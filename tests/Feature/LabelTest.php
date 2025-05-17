@@ -57,12 +57,12 @@ class LabelTest extends TestCase
         $label = Label::where('name', $data['name'])->first();
         $response = $this->actingAs($user)->delete("/labels/{$label->id}");
         $this->assertDatabaseMissing('labels', [
-            'name'=>$label->name,
+            'name' => $label->name,
         ]);
         $response->assertSessionHas('labels');
         //undeleted
         $label2 = Label::factory()->create();
-        $task = Task::factory()->for($user, 'creator')->create(['status_id'=>$tasStatus->id]);
+        $task = Task::factory()->for($user, 'creator')->create(['status_id' => $tasStatus->id]);
         $task->labeles()->attach([$label2->id]);
         $response = $this->actingAs($user)->delete("/labels/{$label2->id}");
         $response->assertSessionHas('alert');

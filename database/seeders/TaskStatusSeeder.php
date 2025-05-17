@@ -14,7 +14,7 @@ class TaskStatusSeeder extends Seeder
     public function run(): void
     {
         TaskStatus::factory()->count(4)->sequence(
-            ['name' =>'новый'],
+            ['name' => 'новый'],
             ['name' => 'в работе'],
             ['name' => 'на тестировании'],
             ['name' => 'завершен'],

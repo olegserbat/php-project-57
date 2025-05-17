@@ -74,8 +74,8 @@ class TaskTest extends TestCase
         $this->actingAs($user)->delete("/tasks/{$task->id}");
         $response->assertSessionHas('task');
         $this->assertDatabaseMissing('tasks', [
-            'name'=>$task->name,
-            'description'=>$task->description,
+            'name' => $task->name,
+            'description' => $task->description,
         ]);
     }
 }
