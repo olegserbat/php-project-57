@@ -79,4 +79,3 @@ class TaskTest extends TestCase
         ]);
     }
 }
-
