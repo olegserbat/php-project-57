@@ -28,7 +28,7 @@ class TaskStatusController extends Controller
         $taskStatus->save();
         $request->session()->flash('status', 'Статус успешно создан');
         return redirect()
-            ->route('task_status.index');
+            ->route('task_statuses.index');
     }
 
     public function edit($id)
@@ -51,7 +51,7 @@ class TaskStatusController extends Controller
         $taskStatus->save();
         $request->session()->flash('status', 'Статус успешно изменён');
         return redirect()
-            ->route('task_status.index');
+            ->route('task_statuses.index');
     }
 
     public function destroy(Request $request, $id)
@@ -65,6 +65,6 @@ class TaskStatusController extends Controller
             $request->session()->flash('alert', 'Не удалось удалить статус');
         }
         return redirect()
-            ->route('task_status.index');
+            ->route('task_statuses.index');
     }
 }

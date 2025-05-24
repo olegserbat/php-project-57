@@ -45,20 +45,12 @@
                                @auth()
                                     <td>
                                        <td class="border-b border-dashed text-left">
-                                           <a href="{{route('task_status.delete', ['id' => $taskStatuse->id, '_token' => csrf_token()])}}"
+                                           <a href="{{route('task_statuses.destroy', ['id' => $taskStatuse->id, '_token' => csrf_token()])}}"
                                               data-confirm="Уверены, что хотите удалить?"
                                               data-method="delete" style="color: red"
                                               rel="nofollow">
                                                Удалить
                                            </a> |
-                                           {{--                                        <form class="text-blue-600 hover:text-blue-900"--}}
-{{--                                              action="/task_statuses/{{$taskStatuse->id}}" method="POST">--}}
-{{--                                            @csrf--}}
-{{--                                            @method('DELETE')--}}
-{{--                                            <button type="submit" class="btn btn-danger btn-sm"--}}
-{{--                                                    onclick="return confirm('Уверены, что хотите удалить?')">--}}
-{{--                                                Удалить</button>--}}
-{{--                                        </form>--}}
                                         <a class="text-blue-600 hover:text-blue-900" href="/task_statuses/{{$taskStatuse->id}}/edit">
                                             Изменить </a>
                                     </td>
