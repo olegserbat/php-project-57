@@ -45,7 +45,7 @@
                                @auth()
                                     <td>
                                        <td class="border-b border-dashed text-left">
-                                           <a href="{{route('task_statuses.destroy', ['id' => $taskStatuse->id, '_token' => csrf_token()])}}"
+                                           <a href="{{route('task_statuses.destroy', ['task_status' => $taskStatuse->id, '_token' => csrf_token()])}}"
                                               data-confirm="Уверены, что хотите удалить?"
                                               data-method="delete" style="color: red"
                                               rel="nofollow">

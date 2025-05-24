@@ -94,7 +94,7 @@
                                 @auth()
                                     @if($task->created_by_id == auth()->user()->id)
                                     <td class="border-b border-dashed text-left">
-                                            <a href="{{route('tasks.destroy', ['id' => $task->id, '_token' => csrf_token()])}}"
+                                            <a href="{{route('tasks.destroy', ['task' => $task->id, '_token' => csrf_token()])}}"
                                                data-confirm="Уверены, что хотите удалить?"
                                                data-method="delete" style="color: red"
                                                rel="nofollow">

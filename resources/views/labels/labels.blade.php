@@ -49,7 +49,7 @@
                         <td>{{$label->created_at}}</td>
                         @auth()
                             <td>
-                                <a href="{{route('labels.destroy', ['id'=> $label->id, '_token' => csrf_token()])}}"
+                                <a href="{{route('labels.destroy', ['label'=> $label->id, '_token' => csrf_token()])}}"
                                    data-confirm="Уверены, что хотите удалить?"
                                    data-method="delete" style="color: red"
                                    rel="nofollow">
