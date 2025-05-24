@@ -58,7 +58,6 @@ class TaskController extends Controller
     {
         $createdById = auth()->user()->id;
         $data = $request->validated();
-        //$data['labels'] = (isset($data['labels'])) ? json_encode($data['labels']) : null;
         $task = new Task();
         $task->fill([
             'name' => $data['name'],
@@ -66,18 +65,12 @@ class TaskController extends Controller
             'status_id' => $data['status_id'],
             'created_by_id' => $createdById,
             'assigned_to_id' => $data['assigned_to_id'],
-            //'labels' => $data['labels'],
         ]);
         DB::transaction(function () use ($task, $data) {
             $task->save();
             if (isset($data['labels'])) {
                 $task->labeles()->attach($data['labels']);
             }
-//            $labels = [];
-//            foreach ($data['labels'] as $label){
-//                $labels[] = ['label_id'=>$label, 'task_id'=>$task->id];
-//            }
-//            DB::table('label_task')->insert($labels);
         });
         $request->session()->flash('task', 'Задача успешно создана');
         return redirect()

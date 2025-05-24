@@ -11,9 +11,6 @@ Route::get('/', function () {
 })->name('main');
 
 
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -23,10 +20,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-//Route::get('/tasks', function () {
-//    return view('tasks');
-//});
-
+//Route::resource('task_statuses', TaskStatusController::class);
 Route::get('/task_statuses', [TaskStatusController::class, 'index'])->name('task_status.index');
 Route::get('/task_statuses/create', [TaskStatusController::class, 'create'])->name('task_status.create');
 Route::post('/task_statuses', [TaskStatusController::class, 'store'])->name('task_status.store');
@@ -36,7 +30,7 @@ Route::delete('/task_statuses/{id}', [TaskStatusController::class, 'destroy'])->
 
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
 Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
-Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('tasksphp.show');
+Route::get('/tasks/{id}', [TaskController::class, 'show'])->name('tasks.show');
 Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
 Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
 Route::patch('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
