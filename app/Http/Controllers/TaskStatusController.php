@@ -45,7 +45,8 @@ class TaskStatusController extends Controller
                 'name' => [
                     'required',
                     'max:255']
-            ]);
+            ]
+        );
         $taskStatus->fill($data);
         $taskStatus->save();
         $request->session()->flash('status', 'Статус успешно изменён');
