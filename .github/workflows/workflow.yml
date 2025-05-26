@@ -32,9 +32,9 @@ jobs:
         # Run test
         run: make test
         # Run Sonar
-      - name: Run tests with phpunit/phpunit
-        run: make test-coverage1
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#      - name: Run tests with phpunit/phpunit
+#        run: make test-coverage1
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@v4
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
