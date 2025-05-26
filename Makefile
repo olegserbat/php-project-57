@@ -9,11 +9,11 @@ lint:
 test:
 	composer exec --verbose phpunit tests
 
-#test-coverage:
-#	composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml
+test-coverage1:
+	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml
 
 test-coverage:
-	composer exec --verbose phpunit tests -- --coverage-text
+	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --coverage-text
 
 seeders:
 	php artisan db:seed --class=TaskStatusSeeder
