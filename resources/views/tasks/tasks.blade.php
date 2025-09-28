@@ -72,6 +72,7 @@
                         <th>Автор</th>
                         <th>Исполнитель</th>
                         <th>Дата создания</th>
+                        <th>Наличие комментариев</th>
                         @auth()
                             <th>Действия</th>
                         @endauth
@@ -90,6 +91,7 @@
                             <td>{{ $task->creator->name}}</td>
                             <td>{{$task->assign->name ?? ''}}</td>
                             <td>{{$task->created_at->format('d.m.Y')}}</td>
+                            <td> Нет по умолчанию </td>
                             <td>
                                 @auth()
                                     @if($task->created_by_id == auth()->user()->id)
@@ -100,15 +102,7 @@
                                                rel="nofollow">
                                                 Удалить
                                             </a>  |
-{{--                                        <form class="text-red-600 hover:text-blue-900"--}}
-{{--                                              action="/tasks/{{$task->id}}" method="POST">--}}
-{{--                                            @csrf--}}
-{{--                                            @method('DELETE')--}}
-{{--                                            <button type="submit" class="btn btn-danger btn-sm"--}}
-{{--                                                    onclick="return confirm('Уверены, что хотите удалить?')">--}}
-{{--                                                Удалить--}}
-{{--                                            </button>--}}
-{{--                                        </form>--}}
+
                                     @endif
                                     <a href="/tasks/{{$task->id}}/edit" class="text-blue-600 hover:text-blue-900">
                                         Изменить </a>

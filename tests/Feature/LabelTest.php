@@ -6,6 +6,7 @@ use App\Models\Label;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
 use Tests\TestCase;
 
 class LabelTest extends TestCase

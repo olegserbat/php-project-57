@@ -17,6 +17,7 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
+        //return json_encode(DB::table('tasks')->count(), JSON_UNESCAPED_UNICODE);
         $filterStart = [
             'created_by_id' => '',
             'status_id' => '',
@@ -117,9 +118,13 @@ class TaskController extends Controller
             ->route('tasks.index');
     }
 
+
     public function show($id)
     {
         $task = Task::findOrFail($id);
         return view('tasks.task_show', ['task' => $task]);
     }
+
 }
+
+

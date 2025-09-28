@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreLabelRequest;
+use App\Http\Requests\UpdateLabelRequest;
 use App\Models\Label;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,7 @@ class LabelController extends Controller
         return view('labels.label_edit', ['label' => $label]);
     }
 
-    public function update(StoreLabelRequest $request, $id)
+    public function update(UpdateLabelRequest $request, $id)
     {
         $label = Label::findOrFail($id);
         $data = $request->validated();

@@ -44,7 +44,8 @@ class TaskStatusController extends Controller
             [
                 'name' => [
                     'required',
-                    'max:255']
+                    'max:255',
+                    ]
             ]
         );
         $taskStatus->fill($data);

@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreTaskRequest extends FormRequest
+class UpdateLabelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,29 +21,13 @@ class StoreTaskRequest extends FormRequest
      */
     public function rules(): array
     {
-        $uniq = Rule::unique('tasks');
-        if ($this->route('task')) {
-            $uniq = $uniq->ignore($this->route('task'));
-        }
         return [
             'name' => [
                 'required',
-                $uniq,
                 'max:255',
-                'string',
+                'string'
             ],
-            'status_id' => 'required|integer',
             'description' => 'nullable|max:255|string',
-            'assigned_to_id' => 'nullable|integer',
-            'labels' => 'nullable|array',
-            'labels.*' => 'integer',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'name.unique' => 'Задача с таким именем уже существует',
         ];
     }
 }
