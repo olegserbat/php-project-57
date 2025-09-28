@@ -124,7 +124,4 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         return view('tasks.task_show', ['task' => $task]);
     }
-
 }
-
-
